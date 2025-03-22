@@ -106,13 +106,9 @@
     .btn-search-again {
       background-color: #34c759;
       color: white;
-      padding: 14px 24px;
-      font-weight: 600;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     }
     .btn-search-again:hover {
       background-color: #2ba844;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     }
     .button-group {
       display: flex;
@@ -149,37 +145,20 @@
       flex: 1;
       min-width: 0;
     }
-    .seat-list {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 20px;
     }
-    .seat-card {
-      background: #f8fafc;
-      border: 1px solid #e0e4e8;
-      border-radius: 8px;
-      padding: 15px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s ease;
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e0e4e8;
     }
-    .seat-card:hover {
-      transform: translateY(-2px);
-    }
-    .seat-card h3 {
-      font-size: 1.1rem;
-      font-weight: 500;
+    th {
+      background-color: #f1f5f9;
       color: #1a73e8;
-      margin-bottom: 5px;
-    }
-    .seat-card p {
-      font-size: 0.95rem;
-      color: #344563;
-      margin: 2px 0;
-    }
-    .seat-card .rank {
       font-weight: 500;
-      color: #1557b0;
     }
     .error {
       color: #d93025;
@@ -217,23 +196,11 @@
       .btn-prev:hover {
         transform: translateX(-4px);
       }
-      .btn-search-again {
-        width: auto;
-      }
       .btn-search-again:hover {
         transform: scale(1.05);
       }
       .filter-row {
         gap: 20px;
-      }
-      .seat-card {
-        padding: 20px;
-      }
-      .seat-card h3 {
-        font-size: 1.2rem;
-      }
-      .seat-card p {
-        font-size: 1rem;
       }
     }
 
@@ -269,8 +236,6 @@
       }
       .btn-search-again {
         width: 100%;
-        padding: 12px 20px;
-        font-size: 1rem;
       }
       .filter-row {
         flex-direction: column;
@@ -282,24 +247,6 @@
       }
       input, select {
         font-size: 0.95rem;
-      }
-      select {
-        background: #1a73e8;
-        color: white;
-      }
-      select option {
-        background: white;
-        color: #1a2a44;
-      }
-      .seat-card {
-        padding: 12px;
-        word-wrap: break-word;
-      }
-      .seat-card h3 {
-        font-size: 1rem;
-      }
-      .seat-card p {
-        font-size: 0.85rem;
       }
     }
   </style>
@@ -526,11 +473,7 @@
         : new Set(data.map(row => row.Program));
 
       let html = `
-        <div class="button-group">
-          <button class="btn btn-search-again" onclick="goToHome()">
-            <span></span> Search Again
-          </button>
-        </div>
+        <div class="button-group"><button class="btn btn-search-again" onclick="goToHome()">Search Again</button></div>
         <br>
         <div class="filter-section">
           <div class="filter-row">
@@ -554,18 +497,13 @@
             ${currentProgramFilter ? `<button class="btn btn-clear" onclick="clearProgramFilter()">Clear</button>` : ''}
           </div>
         </div>
-        <div class="seat-list">
+        <table>
+          <tr><th>Institute</th><th>Program</th><th>Closing Rank</th></tr>
       `;
       data.forEach(row => {
-        html += `
-          <div class="seat-card">
-            <h3>${row.Institute}</h3>
-            <p>Branch: ${row.Program}</p>
-            <p class="rank">Closing Rank: ${row.ClosingRank}</p>
-          </div>
-        `;
+        html += `<tr><td>${row.Institute}</td><td>${row.Program}</td><td>${row.ClosingRank}</td></tr>`;
       });
-      html += `</div>`;
+      html += `</table>`;
       resultDiv.innerHTML = html;
     }
 

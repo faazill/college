@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JEE Main College Predictor 2025</title>
+  <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #f0f4f8, #e6eef6);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 20px;
+      color: #1a2a44;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .app-container {
+      width: 100%;
+      background: #ffffff;
+      border-radius: 16px;
+      border: 1px solid #e0e4e8;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .app-header {
+      background: #1a73e8;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    h1 {
+      font-weight: 600;
+    }
+    .subtitle {
+      opacity: 0.9;
+    }
+    .content {
+      padding: 20px;
+      overflow-y: auto;
+    }
+    label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 6px;
+      color: #344563;
+    }
+    input, select {
+      width: 100%;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+      border: 1px solid #d1d9e6;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-family: 'Poppins', sans-serif;
+      background: #f8fafc;
+      transition: border-color 0.2s ease;
+    }
+    input:focus, select:focus {
+      outline: none;
+      border-color: #1a73e8;
+    }
+    .btn {
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-next {
+      background-color: #1a73e8;
+      color: white;
+    }
+    .btn-next:hover {
+      background-color: #1557b0;
+    }
+    .btn-prev {
+      background-color: #e8ecef;
+      color: #344563;
+    }
+    .btn-prev:hover {
+      background-color: #d1d9e6;
+    }
+    .btn-clear {
+      background-color: #ff4d4f;
+      color: white;
+      padding: 8px 16px;
+    }
+    .btn-clear:hover {
+      background-color: #d93638;
+    }
+    .btn-search-again {
+      background-color: #34c759;
+      color: white;
+    }
+    .btn-search-again:hover {
+      background-color: #2ba844;
+    }
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .step {
+      display: none;
+      transition: opacity 0.3s ease;
+    }
+    .step.active {
+      display: block;
+      opacity: 1;
+    }
+    .hidden {
+      display: none;
+    }
+    #result {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #e0e4e8;
+    }
+    .filter-section {
+      margin-bottom: 20px;
+    }
+    .filter-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .filter-item {
+      flex: 1;
+      min-width: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e0e4e8;
+    }
+    th {
+      background-color: #f1f5f9;
+      color: #1a73e8;
+      font-weight: 500;
+    }
+    .error {
+      color: #d93025;
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* Desktop Styles */
+    @media (min-width: 769px) {
+      .app-container {
+        max-width: 900px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      }
+      .app-header {
+        padding: 30px;
+      }
+      h1 {
+        font-size: 2.2rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      .content {
+        padding: 30px;
+        max-height: calc(100vh - 120px);
+      }
+      .btn {
+        width: auto;
+        padding: 12px 30px;
+      }
+      .btn-next:hover {
+        transform: translateX(4px);
+      }
+      .btn-prev:hover {
+        transform: translateX(-4px);
+      }
+      .btn-search-again:hover {
+        transform: scale(1.05);
+      }
+      .filter-row {
+        gap: 20px;
+      }
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 768px) {
+      body {
+        padding: 0;
+        align-items: stretch;
+      }
+      .app-container {
+        max-width: 100%;
+        border-radius: 0;
+        border: none;
+        height: 100vh;
+      }
+      .app-header {
+        padding: 15px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      .subtitle {
+        font-size: 0.8rem;
+      }
+      .content {
+        padding: 15px;
+        max-height: calc(100vh - 80px);
+      }
+      .btn {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        width: 120px;
+      }
+      .btn-search-again {
+        width: 100%;
+      }
+      .filter-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+      .btn-clear {
+        padding: 6px 12px;
+        width: auto;
+      }
+      input, select {
+        font-size: 0.95rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="app-header">
+      <h1>JEE Main College Predictor 2025</h1>
+      <p class="subtitle">Based on JoSAA 2024 Round 5 Cutoff Data</p>
+    </div>
+    <div class="content">
+      <div class="step active" id="step1">
+        <label for="quota">Select Quota:</label>
+        <select id="quota">
+          <option value="">-- Select Quota --</option>
+          <option value="HS">Home State (HS)</option>
+          <option value="OS">Other State (OS)</option>
+        </select>
+        <p class="error" id="quota-error">This field is required.</p>
+        <div class="button-group">
+          <div></div>
+          <button class="btn btn-next" onclick="goToNext(1)">Next <span>→</span></button>
+        </div>
+      </div>
+
+      <div class="step" id="step2">
+        <div id="hsCollege" class="hidden">
+          <label for="college">Select College:</label>
+          <select id="college"></select>
+        </div>
+        <label for="category">Select Category:</label>
+        <select id="category" onchange="updateRankPlaceholder()"></select>
+        <p class="error" id="category-error">This field is required.</p>
+        <label for="gender">Select Gender:</label>
+        <select id="gender">
+          <option value="">-- Select Gender --</option>
+          <option value="Gender-Neutral">Gender-Neutral</option>
+          <option value="Female-only (including Supernumerary)">Female Only</option>
+        </select>
+        <p class="error" id="gender-error">This field is required.</p>
+        <div class="button-group">
+          <button class="btn btn-prev" onclick="goToPrev(0)"><span>←</span> Previous</button>
+          <button class="btn btn-next" onclick="goToNext(2)">Next <span>→</span></button>
+        </div>
+      </div>
+
+      <div class="step" id="step3">
+        <label for="rank">Enter Your JEE Rank:</label>
+        <input type="number" id="rank" placeholder="Enter your rank" />
+        <p class="error" id="rank-error">Please enter a valid rank.</p>
+        <div class="button-group">
+          <button class="btn btn-prev" onclick="goToPrev(1)"><span>←</span> Previous</button>
+          <button class="btn btn-next" onclick="predictSeats()">Show Seats</button>
+        </div>
+      </div>
+
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <script>
+    let allData = [];
+    let filteredData = [];
+    let currentCollegeFilter = '';
+    let currentProgramFilter = '';
+
+    async function loadCSV(file) {
+      const response = await fetch(file);
+      const text = await response.text();
+      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+      return parsed.data.map(row => ({
+        Institute: row["Institute"]?.trim(),
+        Program: row["Academic Program Name"]?.trim(),
+        Quota: row["Quota"]?.trim(),
+        Category: row["Seat Type"]?.trim(),
+        Gender: row["Gender"]?.trim(),
+        ClosingRank: parseInt(row["Closing Rank"])
+      })).filter(row => !isNaN(row.ClosingRank));
+    }
+
+    function updateRankPlaceholder() {
+      const category = document.getElementById('category').value;
+      const rankInput = document.getElementById('rank');
+      if (category) {
+        rankInput.placeholder = `Enter your ${category} rank`;
+      } else {
+        rankInput.placeholder = "Enter your rank";
+      }
+    }
+
+    async function goToNext(step) {
+      if (step === 1) {
+        const quota = document.getElementById('quota').value;
+        if (!quota) {
+          document.getElementById('quota-error').style.display = 'block';
+          return;
+        }
+        document.getElementById('quota-error').style.display = 'none';
+        const file = quota === 'HS' ? '2024Round5_HS_sorted.csv' : '2024Round5_OS_sorted.csv';
+        allData = await loadCSV(file);
+        populateCategories(allData);
+        if (quota === 'HS') {
+          document.getElementById('hsCollege').classList.remove('hidden');
+          populateColleges(allData);
+        } else {
+          document.getElementById('hsCollege').classList.add('hidden');
+        }
+      } else if (step === 2) {
+        const category = document.getElementById('category').value;
+        const gender = document.getElementById('gender').value;
+        let hasError = false;
+        if (!category) {
+          document.getElementById('category-error').style.display = 'block';
+          hasError = true;
+        } else {
+          document.getElementById('category-error').style.display = 'none';
+        }
+        if (!gender) {
+          document.getElementById('gender-error').style.display = 'block';
+          hasError = true;
+        } else {
+          document.getElementById('gender-error').style.display = 'none';
+        }
+        if (hasError) return;
+        updateRankPlaceholder();
+      }
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.style.opacity = '0';
+        el.classList.toggle('active', idx === step);
+        if (idx === step) setTimeout(() => el.style.opacity = '1', 10);
+      });
+    }
+
+    function goToPrev(step) {
+      document.getElementById('result').innerHTML = '';
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.style.opacity = '0';
+        el.classList.toggle('active', idx === step);
+        if (idx === step) setTimeout(() => el.style.opacity = '1', 10);
+      });
+    }
+
+    function goToHome() {
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('quota').value = '';
+      document.getElementById('category').value = '';
+      document.getElementById('gender').value = '';
+      document.getElementById('rank').value = '';
+      document.getElementById('rank').placeholder = "Enter your rank";
+      if (document.getElementById('college')) document.getElementById('college').value = '';
+      document.getElementById('hsCollege').classList.add('hidden');
+      allData = [];
+      filteredData = [];
+      currentCollegeFilter = '';
+      currentProgramFilter = '';
+      document.querySelectorAll('.step').forEach((el, idx) => {
+        el.style.opacity = '0';
+        el.classList.toggle('active', idx === 0);
+        if (idx === 0) setTimeout(() => el.style.opacity = '1', 10);
+      });
+    }
+
+    function populateColleges(data) {
+      const collegeSet = new Set(data.map(row => row.Institute));
+      const collegeSelect = document.getElementById('college');
+      collegeSelect.innerHTML = '<option value="">-- All Colleges --</option>';
+      [...collegeSet].sort().forEach(college => {
+        const option = document.createElement('option');
+        option.value = college;
+        option.textContent = college;
+        collegeSelect.appendChild(option);
+      });
+    }
+
+    function populateCategories(data) {
+      const categorySet = new Set(data.map(row => row.Category));
+      const categorySelect = document.getElementById('category');
+      categorySelect.innerHTML = '<option value="">-- Select Category --</option>';
+      [...categorySet].sort().forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        categorySelect.appendChild(option);
+      });
+    }
+
+    function predictSeats() {
+      const rank = parseInt(document.getElementById('rank').value);
+      const quota = document.getElementById('quota').value;
+      const category = document.getElementById('category').value;
+      const gender = document.getElementById('gender').value;
+      const selectedCollege = document.getElementById('college').value;
+      const resultDiv = document.getElementById('result');
+      resultDiv.innerHTML = '';
+
+      if (isNaN(rank)) {
+        document.getElementById('rank-error').style.display = 'block';
+        return;
+      }
+      document.getElementById('rank-error').style.display = 'none';
+
+      filteredData = allData.filter(row =>
+        row.ClosingRank >= rank &&
+        row.Category === category &&
+        row.Gender === gender &&
+        (quota === 'OS' || !selectedCollege || row.Institute === selectedCollege)
+      ).sort((a, b) => a.ClosingRank - b.ClosingRank);
+
+      currentCollegeFilter = '';
+      currentProgramFilter = '';
+      renderResults(filteredData);
+    }
+
+    function renderResults(data) {
+      const resultDiv = document.getElementById('result');
+      if (!data.length) {
+        resultDiv.innerHTML = '<p>No seats found matching your filters.</p>';
+        return;
+      }
+
+      const collegeSet = new Set(data.map(row => row.Institute));
+      const programSet = currentCollegeFilter
+        ? new Set(data.filter(row => row.Institute === currentCollegeFilter).map(row => row.Program))
+        : new Set(data.map(row => row.Program));
+
+      let html = `
+        <div class="button-group"><button class="btn btn-search-again" onclick="goToHome()">Search Again</button></div>
+        <h2>Available Seats:</h2>
+        <div class="filter-section">
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="filter-college">Filter by College:</label>
+              <select id="filter-college" onchange="applyFilters()">
+                <option value="">-- All Colleges --</option>
+                ${[...collegeSet].sort().map(college => `<option value="${college}" ${college === currentCollegeFilter ? 'selected' : ''}>${college}</option>`).join('')}
+              </select>
+            </div>
+            ${currentCollegeFilter ? `<button class="btn btn-clear" onclick="clearCollegeFilter()">Clear</button>` : ''}
+          </div>
+          <div class="filter-row">
+            <div class="filter-item">
+              <label for="filter-program">Filter by Branch:</label>
+              <select id="filter-program" onchange="applyFilters()">
+                <option value="">-- All Branches --</option>
+                ${[...programSet].sort().map(program => `<option value="${program}" ${program === currentProgramFilter ? 'selected' : ''}>${program}</option>`).join('')}
+              </select>
+            </div>
+            ${currentProgramFilter ? `<button class="btn btn-clear" onclick="clearProgramFilter()">Clear</button>` : ''}
+          </div>
+        </div>
+        <table>
+          <tr><th>Institute</th><th>Program</th><th>Closing Rank</th></tr>
+      `;
+      data.forEach(row => {
+        html += `<tr><td>${row.Institute}</td><td>${row.Program}</td><td>${row.ClosingRank}</td></tr>`;
+      });
+      html += `</table>`;
+      resultDiv.innerHTML = html;
+    }
+
+    function applyFilters() {
+      const filterCollege = document.getElementById('filter-college').value;
+      const filterProgram = document.getElementById('filter-program').value;
+
+      currentCollegeFilter = filterCollege;
+      currentProgramFilter = filterProgram;
+
+      let filtered = filteredData;
+      if (currentCollegeFilter) {
+        filtered = filtered.filter(row => row.Institute === currentCollegeFilter);
+      }
+      if (currentProgramFilter) {
+        filtered = filtered.filter(row => row.Program === currentProgramFilter);
+      }
+
+      renderResults(filtered);
+    }
+
+    function clearCollegeFilter() {
+      currentCollegeFilter = '';
+      document.getElementById('filter-college').value = '';
+      applyFilters();
+    }
+
+    function clearProgramFilter() {
+      currentProgramFilter = '';
+      document.getElementById('filter-program').value = '';
+      applyFilters();
+    }
+  </script>
+</body>
+</html>

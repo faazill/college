@@ -5,6 +5,30 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JEE Main College Predictor 2025</title>
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+  <!-- Firebase Modular SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+    import { getDatabase, ref, push } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDQXmnOBTEQgqAZT9Dyjl3wJITgau54bCQ",
+      authDomain: "x-and-y-91497.firebaseapp.com",
+      projectId: "x-and-y-91497",
+      storageBucket: "x-and-y-91497.firebasestorage.app",
+      messagingSenderId: "270374509466",
+      appId: "1:270374509466:web:51f3629f47745b8a8e3823",
+      measurementId: "G-QJB9GEH5ZN",
+      databaseURL: "https://x-and-y-91497-default-rtdb.firebaseio.com/"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    window.db = db;
+    window.push = push;
+    window.ref = ref;
+  </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     * {
@@ -110,6 +134,15 @@
     .btn-search-again:hover {
       background-color: #2ba844;
     }
+    .btn-download-pdf {
+      background: linear-gradient(135deg, #ff6f61, #de4d4d);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 111, 97, 0.4);
+    }
+    .btn-download-pdf:hover {
+      background: linear-gradient(135deg, #de4d4d, #ff6f61);
+      transform: scale(1.05);
+    }
     .button-group {
       display: flex;
       justify-content: space-between;
@@ -167,7 +200,6 @@
       display: none;
     }
 
-    /* Desktop Styles */
     @media (min-width: 769px) {
       .app-container {
         max-width: 900px;
@@ -196,7 +228,7 @@
       .btn-prev:hover {
         transform: translateX(-4px);
       }
-      .btn-search-again:hover {
+      .btn-search-again:hover, .btn-download-pdf:hover {
         transform: scale(1.05);
       }
       .filter-row {
@@ -204,7 +236,6 @@
       }
     }
 
-    /* Mobile Styles */
     @media (max-width: 768px) {
       body {
         padding: 0;
@@ -234,7 +265,7 @@
         font-size: 0.9rem;
         width: 120px;
       }
-      .btn-search-again {
+      .btn-search-again, .btn-download-pdf {
         width: 100%;
       }
       .filter-row {
@@ -278,7 +309,7 @@
           <select id="college"></select>
         </div>
         <label for="category">Select Category:</label>
-        <select id="category" onchange="updateRankPlaceholder()"></select>
+        <select id="category" onchange="updateRankInputs()"></select>
         <p class="error" id="category-error">This field is required.</p>
         <label for="gender">Select Gender:</label>
         <select id="gender">
@@ -294,9 +325,14 @@
       </div>
 
       <div class="step" id="step3">
-        <label for="rank">Enter Your JEE Rank:</label>
-        <input type="number" id="rank" placeholder="Enter your rank" />
+        <label for="rank">Enter Your JEE Category Rank:</label>
+        <input type="number" id="rank" placeholder="Enter your category rank" />
         <p class="error" id="rank-error">Please enter a valid rank.</p>
+        <div id="openRankSection" class="hidden">
+          <label for="open-rank">Enter Your JEE Open Rank:</label>
+          <input type="number" id="open-rank" placeholder="Enter your open rank" />
+          <p class="error" id="open-rank-error">Please enter a valid open rank.</p>
+        </div>
         <div class="button-group">
           <button class="btn btn-prev" onclick="goToPrev(1)"><span>←</span> Previous</button>
           <button class="btn btn-next" onclick="predictSeats()">Show Seats</button>
@@ -314,27 +350,37 @@
     let currentProgramFilter = '';
 
     async function loadCSV(file) {
-      const response = await fetch(file);
-      const text = await response.text();
-      const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
-      return parsed.data.map(row => ({
-        Institute: row["Institute"]?.trim(),
-        Program: row["Academic Program Name"]?.trim(),
-        Quota: row["Quota"]?.trim(),
-        Category: row["Seat Type"]?.trim(),
-        Gender: row["Gender"]?.trim(),
-        ClosingRank: parseInt(row["Closing Rank"])
-      })).filter(row => !isNaN(row.ClosingRank));
+      try {
+        const response = await fetch(file);
+        if (!response.ok) throw new Error('Failed to load CSV file');
+        const text = await response.text();
+        const parsed = Papa.parse(text, { header: true, skipEmptyLines: true });
+        return parsed.data.map(row => ({
+          Institute: row["Institute"]?.trim(),
+          Program: row["Academic Program Name"]?.trim(),
+          Quota: row["Quota"]?.trim(),
+          Category: row["Seat Type"]?.trim(),
+          Gender: row["Gender"]?.trim(),
+          ClosingRank: parseInt(row["Closing Rank"])
+        })).filter(row => !isNaN(row.ClosingRank));
+      } catch (error) {
+        console.error('Error loading CSV:', error);
+        document.getElementById('quota-error').textContent = 'Error loading data. Please try again.';
+        document.getElementById('quota-error').style.display = 'block';
+        return [];
+      }
     }
 
-    function updateRankPlaceholder() {
+    function updateRankInputs() {
       const category = document.getElementById('category').value;
       const rankInput = document.getElementById('rank');
-      if (category) {
-        rankInput.placeholder = `Enter your ${category} rank`;
+      const openRankSection = document.getElementById('openRankSection');
+      if (category && category !== 'OPEN') {
+        openRankSection.classList.remove('hidden');
       } else {
-        rankInput.placeholder = "Enter your rank";
+        openRankSection.classList.add('hidden');
       }
+      rankInput.placeholder = category ? `Enter your ${category} rank` : "Enter your rank";
     }
 
     async function goToNext(step) {
@@ -347,6 +393,7 @@
         document.getElementById('quota-error').style.display = 'none';
         const file = quota === 'HS' ? '2024Round5_HS_sorted.csv' : '2024Round5_OS_sorted.csv';
         allData = await loadCSV(file);
+        if (allData.length === 0) return;
         populateCategories(allData);
         if (quota === 'HS') {
           document.getElementById('hsCollege').classList.remove('hidden');
@@ -371,7 +418,7 @@
           document.getElementById('gender-error').style.display = 'none';
         }
         if (hasError) return;
-        updateRankPlaceholder();
+        updateRankInputs();
       }
       document.querySelectorAll('.step').forEach((el, idx) => {
         el.style.opacity = '0';
@@ -395,7 +442,9 @@
       document.getElementById('category').value = '';
       document.getElementById('gender').value = '';
       document.getElementById('rank').value = '';
+      document.getElementById('open-rank').value = '';
       document.getElementById('rank').placeholder = "Enter your rank";
+      document.getElementById('openRankSection').classList.add('hidden');
       if (document.getElementById('college')) document.getElementById('college').value = '';
       document.getElementById('hsCollege').classList.add('hidden');
       allData = [];
@@ -433,12 +482,30 @@
       });
     }
 
+    function storeRankData(category, rank, openRank) {
+      // Only store data if category is not "OPEN"
+      if (category !== 'OPEN' && rank && openRank) {
+        const data = {
+          category: category,
+          categoryRank: parseInt(rank),
+          openRank: parseInt(openRank),
+          timestamp: Date.now()
+        };
+        window.push(window.ref(window.db, 'rankData'), data)
+          .then(() => console.log('Rank data stored successfully'))
+          .catch(error => console.error('Error storing rank data:', error));
+      } else if (category === 'OPEN') {
+        console.log('OPEN category selected; data not stored in Firebase.');
+      }
+    }
+
     function predictSeats() {
       const rank = parseInt(document.getElementById('rank').value);
+      const openRank = parseInt(document.getElementById('open-rank').value) || null;
       const quota = document.getElementById('quota').value;
       const category = document.getElementById('category').value;
       const gender = document.getElementById('gender').value;
-      const selectedCollege = document.getElementById('college').value;
+      const selectedCollege = document.getElementById('college')?.value || '';
       const resultDiv = document.getElementById('result');
       resultDiv.innerHTML = '';
 
@@ -447,6 +514,13 @@
         return;
       }
       document.getElementById('rank-error').style.display = 'none';
+      if (category !== 'OPEN' && isNaN(openRank)) {
+        document.getElementById('open-rank-error').style.display = 'block';
+        return;
+      }
+      document.getElementById('open-rank-error').style.display = 'none';
+
+      storeRankData(category, rank, openRank);
 
       filteredData = allData.filter(row =>
         row.ClosingRank >= rank &&
@@ -473,7 +547,10 @@
         : new Set(data.map(row => row.Program));
 
       let html = `
-        <div class="button-group"><button class="btn btn-search-again" onclick="goToHome()">Search Again</button></div>
+        <div class="button-group">
+          <button class="btn btn-search-again" onclick="goToHome()">Search Again</button>
+          <button class="btn btn-download-pdf" onclick="downloadPDF()">Download PDF</button>
+        </div>
         <br>
         <div class="filter-section">
           <div class="filter-row">
@@ -535,6 +612,55 @@
       currentProgramFilter = '';
       document.getElementById('filter-program').value = '';
       applyFilters();
+    }
+
+    function downloadPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+      const quota = document.getElementById('quota').value;
+      const category = document.getElementById('category').value;
+      const gender = document.getElementById('gender').value;
+      const rank = document.getElementById('rank').value;
+      const openRank = document.getElementById('open-rank').value || 'N/A';
+      const college = document.getElementById('college')?.value || 'All Colleges';
+
+      try {
+        doc.setFontSize(20);
+        doc.setTextColor(26, 115, 232);
+        doc.text("JEE Main College Predictor 2025", 105, 20, { align: "center" });
+        doc.setFontSize(12);
+        doc.setTextColor(100);
+        doc.text("Based on JoSAA 2024 Round 5 Cutoff Data", 105, 28, { align: "center" });
+
+        doc.setFontSize(14);
+        doc.setTextColor(0);
+        doc.text("Your Details", 20, 40);
+        doc.setFontSize(10);
+        doc.text(`Quota: ${quota === 'HS' ? 'Home State' : 'Other State'}`, 20, 50);
+        doc.text(`Category: ${category}`, 20, 58);
+        doc.text(`Gender: ${gender}`, 20, 66);
+        doc.text(`Category Rank: ${rank}`, 20, 74);
+        if (category !== 'OPEN') doc.text(`Open Rank: ${openRank}`, 20, 82);
+        if (quota === 'HS') doc.text(`Selected College: ${college}`, 20, category !== 'OPEN' ? 90 : 82);
+
+        doc.setFontSize(14);
+        doc.text("Predicted Colleges", 20, category !== 'OPEN' ? 100 : 92);
+        doc.setFontSize(10);
+        const tableData = filteredData.map(row => [row.Institute, row.Program, row.ClosingRank]);
+        doc.autoTable({
+          startY: category !== 'OPEN' ? 108 : 100,
+          head: [['Institute', 'Program', 'Closing Rank']],
+          body: tableData,
+          styles: { fontSize: 8, cellPadding: 2 },
+          headStyles: { fillColor: [26, 115, 232], textColor: 255 },
+          alternateRowStyles: { fillColor: [240, 244, 248] }
+        });
+
+        doc.save("JEE_College_Predictor_2025.pdf");
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        alert('Failed to generate PDF. Please try again.');
+      }
     }
   </script>
 </body>

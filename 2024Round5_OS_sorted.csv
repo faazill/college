@@ -32,7 +32,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,"National Institute of Technology, Kurukshetra","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,EWS (PwD),Gender-Neutral,50,50
 2024,5,Maulana Azad National Institute of Technology Bhopal,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,SC (PwD),Gender-Neutral,52,52
 2024,5,"National Institute of Technology, Andhra Pradesh","Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,ST (PwD),Gender-Neutral,38,52
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,ST,Gender-Neutral,52,54
 2024,5,"National Institute of Technology, Tiruchirappalli","Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,54,54
 2024,5,National Institute of Technology Patna,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,SC (PwD),Gender-Neutral,55,55
 2024,5,National Institute of Technology Delhi,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,EWS (PwD),Gender-Neutral,57,57
@@ -71,7 +70,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,"National Institute of Technology Karnataka, Surathkal","Artificial Intelligence (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,109,109
 2024,5,"National Institute of Technology, Tiruchirappalli","Mechanical Engineering (4 Years, Bachelor of Technology)",OS,EWS (PwD),Gender-Neutral,109,109
 2024,5,"National Institute of Technology, Kurukshetra","Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,EWS (PwD),Gender-Neutral,110,110
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,SC,Gender-Neutral,94,111
 2024,5,National Institute of Technology Raipur,"Information Technology (4 Years, Bachelor of Technology)",OS,EWS (PwD),Gender-Neutral,112,112
 2024,5,"National Institute of Technology, Tiruchirappalli","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,ST,Female-only (including Supernumerary),115,115
 2024,5,"National Institute of Technology, Tiruchirappalli","Civil Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,118,118
@@ -111,7 +109,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,"National Institute of Technology, Jamshedpur","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,178,178
 2024,5,Malaviya National Institute of Technology Jaipur,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,179,179
 2024,5,National Institute of Technology Durgapur,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,180,180
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,EWS,Gender-Neutral,141,181
 2024,5,National Institute of Technology Delhi,"Artificial Intelligence and Data Science (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,194,194
 2024,5,"National Institute of Technology Karnataka, Surathkal","Information Technology (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,198,198
 2024,5,"Dr. B R Ambedkar National Institute of Technology, Jalandhar","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,198,198
@@ -154,7 +151,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,"Dr. B R Ambedkar National Institute of Technology, Jalandhar","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Female-only (including Supernumerary),271,271
 2024,5,"Punjab Engineering College, Chandigarh","Computer Science Engineering (Artificial Intelligence) (4 Years, B. Tech / B. Tech (Hons.))",OS,OPEN (PwD),Gender-Neutral,275,275
 2024,5,"National Institute of Technology, Silchar","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,SC (PwD),Female-only (including Supernumerary),276,276
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,SC,Female-only (including Supernumerary),280,280
 2024,5,"National Institute of Technology, Andhra Pradesh","Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,SC (PwD),Gender-Neutral,282,282
 2024,5,"National Institute of Technology, Tiruchirappalli","Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Female-only (including Supernumerary),283,283
 2024,5,"Sardar Vallabhbhai National Institute of Technology, Surat","Physics (5 Years, Integrated Master of Science)",OS,EWS (PwD),Gender-Neutral,283,283
@@ -176,7 +172,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,National Institute of Technology Patna,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,329,329
 2024,5,"National Institute of Technology, Tiruchirappalli","Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,ST,Gender-Neutral,127,329
 2024,5,"National Institute of Technology, Warangal","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,EWS,Gender-Neutral,300,329
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,OBC-NCL,Female-only (including Supernumerary),318,340
 2024,5,"Dr. B R Ambedkar National Institute of Technology, Jalandhar","Information Technology (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,340,340
 2024,5,"National Institute of Technology, Tiruchirappalli","Civil Engineering (4 Years, Bachelor of Technology)",OS,EWS (PwD),Gender-Neutral,342,342
 2024,5,"National Institute of Technology Karnataka, Surathkal","Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,ST,Female-only (including Supernumerary),345,345
@@ -202,7 +197,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,"National Institute of Technology, Kurukshetra","Electrical Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,383,383
 2024,5,"National Institute of Technology, Tiruchirappalli","Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,384,384
 2024,5,"National Institute of Technology, Silchar","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,390,390
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,OBC-NCL,Gender-Neutral,281,391
 2024,5,"National Institute of Technology, Tiruchirappalli","Mechanical Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,391,391
 2024,5,"National Institute of Technology, Kurukshetra","Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Female-only (including Supernumerary),393,393
 2024,5,"National Institute of Technology Karnataka, Surathkal","Artificial Intelligence (4 Years, Bachelor of Technology)",OS,EWS,Gender-Neutral,356,398
@@ -309,7 +303,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,"National Institute of Technology, Tiruchirappalli","Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,SC,Gender-Neutral,394,633
 2024,5,"National Institute of Technology, Rourkela","Mechanical Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,636,636
 2024,5,National Institute of Technology Raipur,"Electronics and Communication Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,638,638
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,OPEN,Female-only (including Supernumerary),555,640
 2024,5,Maulana Azad National Institute of Technology Bhopal,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,645,645
 2024,5,National Institute of Technology Calicut,"Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,EWS,Gender-Neutral,606,645
 2024,5,"National Institute of Technology, Warangal","Computer Science and Engineering (4 Years, Bachelor of Technology)",OS,ST,Female-only (including Supernumerary),649,649
@@ -358,7 +351,6 @@ Year,Round,Institute,Academic Program Name,Quota,Seat Type,Gender,Opening Rank,C
 2024,5,National Institute of Technology Goa,"Electrical and Electronics Engineering (4 Years, Bachelor of Technology)",OS,OBC-NCL (PwD),Gender-Neutral,766,766
 2024,5,"Punjab Engineering College, Chandigarh","Computer Science Engineering (Data Science) (4 Years, B. Tech / B. Tech (Hons.))",OS,OPEN (PwD),Gender-Neutral,772,772
 2024,5,"National Institute of Technology Karnataka, Surathkal","Artificial Intelligence (4 Years, Bachelor of Technology)",OS,SC,Female-only (including Supernumerary),774,774
-2024,5,Maulana Azad National Institute of Technology Bhopal,"Planning (4 Years, Bachelor of Planning)",OS,OPEN,Gender-Neutral,339,781
 2024,5,National Institute of Technology Delhi,"Aerospace Engineering (4 Years, Bachelor of Technology)",OS,ST,Gender-Neutral,785,785
 2024,5,"National Institute of Technology, Kurukshetra","Information Technology (4 Years, Bachelor of Technology)",OS,ST,Gender-Neutral,636,786
 2024,5,Malaviya National Institute of Technology Jaipur,"Electrical Engineering (4 Years, Bachelor of Technology)",OS,OPEN (PwD),Gender-Neutral,787,787

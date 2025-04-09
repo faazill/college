@@ -280,10 +280,68 @@
         font-size: 0.95rem;
       }
     }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+      padding: 20px;
+      background: linear-gradient(135deg, #1a73e8, #0d47a1);
+      position: relative;
+    }
+    .logo {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      object-fit: cover;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+    .header-title {
+      font-size: 2rem;
+      font-weight: 600;
+      color: white;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    .header-title span {
+      color: #ffd700; /* Gold color for "JEE" */
+      font-weight: 700;
+    }
+    .subtitle {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      position: absolute;
+      bottom: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    @media (max-width: 768px) {
+      .header-title {
+        font-size: 1.5rem;
+      }
+      .logo {
+        width: 40px;
+        height: 40px;
+      }
+      .subtitle {
+        font-size: 0.75rem;
+      }
+    }
   </style>
 </head>
 <body>
+
+
   <div class="app-container">
+
+    <div class="app-header">
+      
+      <img src="logo.webp" alt="X and Y JEE Logo" class="logo"> <!-- Replace 'logo.png' with your logo file -->
+      <h1 class="header-title">XandY <span>JEE</span></h1>
+    </div>
+
+
     <div class="app-header">
       <h1>JEE Main College Predictor 2025</h1>
       <p class="subtitle">Based on JoSAA 2024 Round 5 Cutoff Data</p>

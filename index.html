@@ -59,21 +59,33 @@
     }
     .top-section {
       background: #ffffff;
-      padding: 20px;
+      padding: 0px;
       text-align: center;
       border-bottom: 1px solid #e0e4e8;
+    }
+    .carousel {
+      position: relative;
+      width: 100%;
+      max-width: 1000px;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+    .carousel-inner {
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+    .carousel-item {
+      flex: 0 0 100%;
+    }
+    .carousel-item img {
+      width: 100%;
+      height: auto;
+      display: block;
     }
     .logo {
       max-width: 200px;
       height: auto;
       margin-bottom: 15px;
-    }
-    .ad-banner {
-      width: 100%;
-      max-width: 1000px;
-      height: auto;
-      margin: 0 auto;
-      display: block;
     }
     .app-header {
       background: #2f4461;
@@ -278,7 +290,7 @@
       .logo {
         max-width: 150px;
       }
-      .ad-banner {
+      .carousel {
         max-width: 100%;
       }
       .app-header {
@@ -319,8 +331,76 @@
 <body>
   <div class="app-container">
     <div class="top-section">
-     
-      <img src="banner.png" alt="Advertisement" class="ad-banner">
+      <div class="carousel">
+        <div class="carousel-inner">
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+          <div class="carousel-item">
+            <img src="banner.png" alt="Advertisement 1">
+          </div>
+          <div class="carousel-item">
+            <img src="ad2.png" alt="Advertisement 2">
+          </div>
+        </div>
+      </div>
     </div>
     <div class="app-header">
       <h1>JEE Main College Predictor 2025</h1>
@@ -386,6 +466,71 @@
     let filteredData = [];
     let currentCollegeFilter = '';
     let currentProgramFilter = '';
+
+
+
+
+
+ // Carousel JavaScript for continuous right motion with 10 cycles before reset
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel-item');
+let cycleCount = 0;
+const maxCycles = 10; // Reset after 10 complete cycles
+
+// Make sure we have at least 2 slides
+if (slides.length < 2) {
+  console.error('This carousel needs at least 2 slides');
+}
+
+// Clone all slides and append them to create the continuous effect
+document.addEventListener('DOMContentLoaded', function() {
+  const carouselInner = document.querySelector('.carousel-inner');
+  
+  // Clone slides to create an extended track
+  const slideClones = Array.from(slides).map(slide => slide.cloneNode(true));
+  slideClones.forEach(clone => {
+    carouselInner.appendChild(clone);
+  });
+  
+  // Set up the initial position and transition
+  carouselInner.style.transition = 'transform 0.5s ease';
+  carouselInner.style.transform = 'translateX(0)';
+});
+
+function moveRight() {
+  const carouselInner = document.querySelector('.carousel-inner');
+  currentSlide++;
+  
+  // Apply the transform with transition
+  carouselInner.style.transition = 'transform 0.5s ease';
+  carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
+  
+  // Check if we need to reset after completing a full rotation
+  if (currentSlide % slides.length === 0) {
+    cycleCount++;
+    
+    // After 10 full cycles, do a full reset
+    if (cycleCount >= maxCycles) {
+      setTimeout(() => {
+        // Reset without animation
+        carouselInner.style.transition = 'none';
+        carouselInner.style.transform = 'translateX(0)';
+        currentSlide = 0;
+        cycleCount = 0;
+        
+        // Force reflow
+        carouselInner.offsetHeight;
+        
+        // Restore transition for future slides
+        carouselInner.style.transition = 'transform 0.5s ease';
+      }, 500); // Wait for the transition to complete
+    }
+  }
+}
+
+// Start the carousel with continuous right motion
+setInterval(moveRight, 3500); // Move right every 3.5 seconds
+
 
     async function loadCSV(file) {
       try {
@@ -731,6 +876,5 @@
       }
     }
   </script>
-<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9343fd538c1dbf70',t:'MTc0NTMxMzA0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>

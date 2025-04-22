@@ -470,12 +470,14 @@
 
 
 
-
- // Carousel JavaScript for continuous right motion with 10 cycles before reset
+// Carousel JavaScript for continuous right motion with touch/swipe support
 let currentSlide = 0;
 const slides = document.querySelectorAll('.carousel-item');
 let cycleCount = 0;
 const maxCycles = 10; // Reset after 10 complete cycles
+let touchStartX = 0;
+let touchEndX = 0;
+let isDragging = false;
 
 // Make sure we have at least 2 slides
 if (slides.length < 2) {
@@ -497,16 +499,16 @@ document.addEventListener('DOMContentLoaded', function() {
   carouselInner.style.transform = 'translateX(0)';
 });
 
-function moveRight() {
+function moveToSlide(slideIndex) {
   const carouselInner = document.querySelector('.carousel-inner');
-  currentSlide++;
+  currentSlide = slideIndex;
   
   // Apply the transform with transition
   carouselInner.style.transition = 'transform 0.5s ease';
   carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
   
   // Check if we need to reset after completing a full rotation
-  if (currentSlide % slides.length === 0) {
+  if (currentSlide % slides.length === 0 && currentSlide !== 0) {
     cycleCount++;
     
     // After 10 full cycles, do a full reset
@@ -528,10 +530,67 @@ function moveRight() {
   }
 }
 
+function moveRight() {
+  moveToSlide(currentSlide + 1);
+}
+
+function moveLeft() {
+  moveToSlide(currentSlide - 1);
+}
+
+// Touch event handlers for swipe functionality
+const carouselInner = document.querySelector('.carousel-inner');
+
+carouselInner.addEventListener('touchstart', (e) => {
+  touchStartX = e.changedTouches[0].screenX;
+  isDragging = true;
+  carouselInner.style.transition = 'none'; // Disable transition during drag
+});
+
+carouselInner.addEventListener('touchmove', (e) => {
+  if (!isDragging) return;
+  touchEndX = e.changedTouches[0].screenX;
+  const deltaX = touchEndX - touchStartX;
+  const translateX = -currentSlide * 100 + (deltaX / carouselInner.offsetWidth) * 100;
+  carouselInner.style.transform = `translateX(${translateX}%)`;
+});
+
+carouselInner.addEventListener('touchend', () => {
+  if (!isDragging) return;
+  isDragging = false;
+  touchEndX = touchEndX || touchStartX;
+  const deltaX = touchEndX - touchStartX;
+  
+  // Determine swipe direction based on threshold
+  if (deltaX < -50) {
+    moveRight(); // Swipe left
+  } else if (deltaX > 50) {
+    moveLeft(); // Swipe right
+  } else {
+    // Snap back to current slide if swipe is too small
+    carouselInner.style.transition = 'transform 0.5s ease';
+    carouselInner.style.transform = `translateX(-${currentSlide * 100}%)`;
+  }
+});
+
+// Prevent default scrolling behavior during swipe
+carouselInner.addEventListener('touchmove', (e) => {
+  if (isDragging) {
+    e.preventDefault();
+  }
+});
+
 // Start the carousel with continuous right motion
-setInterval(moveRight, 3500); // Move right every 3.5 seconds
+let autoSlide = setInterval(moveRight, 3500); // Move right every 3.5 seconds
 
+// Pause auto-slide on touch and resume after interaction
+carouselInner.addEventListener('touchstart', () => {
+  clearInterval(autoSlide);
+});
 
+carouselInner.addEventListener('touchend', () => {
+  autoSlide = setInterval(moveRight, 3500); // Resume auto-slide
+});
     async function loadCSV(file) {
       try {
         const response = await fetch(file);

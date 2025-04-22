@@ -7,6 +7,7 @@
   <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.3/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://unpkg.com/pdf-lib@1.17.0/dist/pdf-lib.min.js"></script>
   <!-- Firebase Modular SDK -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
@@ -56,8 +57,26 @@
       overflow: hidden;
       transition: all 0.3s ease;
     }
+    .top-section {
+      background: #ffffff;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #e0e4e8;
+    }
+    .logo {
+      max-width: 200px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+    .ad-banner {
+      width: 100%;
+      max-width: 1000px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+    }
     .app-header {
-      background: #1a73e8;
+      background: #2f4461;
       color: white;
       padding: 20px;
       text-align: center;
@@ -205,6 +224,12 @@
         max-width: 900px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
       }
+      .top-section {
+        padding: 0px;
+      }
+      .logo {
+        max-width: 250px;
+      }
       .app-header {
         padding: 30px;
       }
@@ -247,6 +272,15 @@
         border: none;
         height: 100vh;
       }
+      .top-section {
+        padding: 0px;
+      }
+      .logo {
+        max-width: 150px;
+      }
+      .ad-banner {
+        max-width: 100%;
+      }
       .app-header {
         padding: 15px;
       }
@@ -284,6 +318,10 @@
 </head>
 <body>
   <div class="app-container">
+    <div class="top-section">
+     
+      <img src="banner.png" alt="Advertisement" class="ad-banner">
+    </div>
     <div class="app-header">
       <h1>JEE Main College Predictor 2025</h1>
       <p class="subtitle">Based on JoSAA 2024 Round 5 Cutoff Data</p>
@@ -483,7 +521,6 @@
     }
 
     function storeRankData(category, rank, openRank) {
-      // Only store data if category is not "OPEN"
       if (category !== 'OPEN' && rank && openRank) {
         const data = {
           category: category,
@@ -614,8 +651,9 @@
       applyFilters();
     }
 
-    function downloadPDF() {
+    async function downloadPDF() {
       const { jsPDF } = window.jspdf;
+      const { PDFDocument } = window.PDFLib;
       const doc = new jsPDF();
       const quota = document.getElementById('quota').value;
       const category = document.getElementById('category').value;
@@ -625,6 +663,7 @@
       const college = document.getElementById('college')?.value || 'All Colleges';
 
       try {
+        // Generate the college predictor PDF
         doc.setFontSize(20);
         doc.setTextColor(26, 115, 232);
         doc.text("JEE Main College Predictor 2025", 105, 20, { align: "center" });
@@ -656,12 +695,42 @@
           alternateRowStyles: { fillColor: [240, 244, 248] }
         });
 
-        doc.save("JEE_College_Predictor_2025.pdf");
+        // Get the generated PDF as a byte array
+        const mainPdfBytes = doc.output('arraybuffer');
+
+        // Load the main PDF and ad PDF
+        const mainPdfDoc = await PDFDocument.load(mainPdfBytes);
+        const adPdfResponse = await fetch('ad.pdf');
+        if (!adPdfResponse.ok) throw new Error('Failed to load ad.pdf');
+        const adPdfBytes = await adPdfResponse.arrayBuffer();
+        const adPdfDoc = await PDFDocument.load(adPdfBytes);
+
+        // Create a new PDF document to merge both
+        const mergedPdfDoc = await PDFDocument.create();
+
+        // Copy pages from main PDF
+        const mainPages = await mergedPdfDoc.copyPages(mainPdfDoc, mainPdfDoc.getPageIndices());
+        mainPages.forEach(page => mergedPdfDoc.addPage(page));
+
+        // Copy pages from ad PDF
+        const adPages = await mergedPdfDoc.copyPages(adPdfDoc, adPdfDoc.getPageIndices());
+        adPages.forEach(page => mergedPdfDoc.addPage(page));
+
+        // Save the merged PDF
+        const mergedPdfBytes = await mergedPdfDoc.save();
+        const blob = new Blob([mergedPdfBytes], { type: 'application/pdf' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'JEE_College_Predictor_2025.pdf';
+        link.click();
+        URL.revokeObjectURL(url);
       } catch (error) {
         console.error('Error generating PDF:', error);
         alert('Failed to generate PDF. Please try again.');
       }
     }
   </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9343fd538c1dbf70',t:'MTc0NTMxMzA0Mi4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script>
 </body>
 </html>
